@@ -12,6 +12,7 @@
  *     numbersSearch ( $country_code, $pattern )
  *     numbersBuy ( $country_code, $msisdn )
  *     numbersCancel ( $country_code, $msisdn )
+ *     numbersUpdate ( $country_code, $msisdn, $callbackurl )
  *
  */
 
@@ -26,7 +27,8 @@
 			'get_own_numbers' => array('method' => 'GET', 'url' => '/account/numbers/{k}/{s}'),
 			'search_numbers' => array('method' => 'GET', 'url' => '/number/search/{k}/{s}/{country_code}?pattern={pattern}'),
 			'buy_number' => array('method' => 'POST', 'url' => '/number/buy/{k}/{s}/{country_code}/{msisdn}'),
-			'cancel_number' => array('method' => 'POST', 'url' => '/number/cancel/{k}/{s}/{country_code}/{msisdn}')
+			'cancel_number' => array('method' => 'POST', 'url' => '/number/cancel/{k}/{s}/{country_code}/{msisdn}'),
+			'update_number' => array('method' => 'POST', 'url' => '/number/update/{k}/{s}/{country_code}/{msisdn}?moHttpUrl={callbackurl}')
 		);
 
 
@@ -161,6 +163,21 @@
 			$country_code = strtoupper($country_code);
 
 			$tmp = $this->apiCall('cancel_number', array('country_code'=>$country_code, 'msisdn'=>$msisdn));
+			return ($tmp['http_code'] === 200);
+		}
+
+
+		/**
+		 * Update the callback for an existing number on your account
+		 * @param $country_code Country Code for the number being updated
+		 * @param $msisdn the number to update
+		 * @param $callbackurl the callback url
+		 * @return bool
+		 */
+		public function numbersUpdate ($country_code, $msisdn, $callbackurl) {
+			$country_code = strtoupper($country_code);
+
+			$tmp = $this->apiCall('update_number', array('country_code'=>$country_code, 'msisdn'=>$msisdn, 'callbackurl'=>$callbackurl));
 			return ($tmp['http_code'] === 200);
 		}
 
